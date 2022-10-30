@@ -1,0 +1,75 @@
+# https://codewithhugo.com/docker-compose-local-https/
+version: '3.6'
+
+volumes:
+  postgres_data:
+  bundle:
+  node_modules:
+  rails_cache:
+  public:
+
+networks:
+  flt-sim-net:
+    name: flt_sim_network
+
+services:
+  flt_sim_app:
+    container_name: flt_sim_app
+    build:
+      context: ../
+      dockerfile: docker/app/Dockerfile
+    image: flt_sim:dev
+    environment:
+      VITE_RUBY_HOST: flt_sim_vite
+    working_dir: /app
+    depends_on:
+      - flt_sim_db
+      - flt_sim_vite
+    links:
+      - flt_sim_db
+    ports:
+      - 3000:3000
+      - 1234:1234
+      - 26162:26162
+    stdin_open: true
+    tty: true
+    volumes:
+      - ..:/app:cached
+      - rails_cache:/app/tmp/cache
+      - bundle:/usr/local/bundle
+      - node_modules:/app/node_modules
+      - public:/app/public/vite
+      - ~/.ssh:/root/.ssh:ro
+    tmpfs:
+      - /tmp
+    networks:
+      - flt-sim-net
+  flt_sim_db:
+    image: postgres:11.6-alpine
+    container_name: flt_sim_db
+    volumes:
+      - ../docker/db/certs/server.crt:/var/lib/postgresql/server.crt
+      - ../docker/db/certs/server.key:/var/lib/postgresql/server.key
+      - postgres_data:/var/lib/postgresql/data
+      - ../docker/db/digitalaf-role.sql:/docker-entrypoint-initdb.d/digitalaf-role.sql
+    networks:
+      - flt-sim-net
+  flt_sim_vite:
+    build:
+      context: ../
+      dockerfile: docker/app/Dockerfile
+    container_name: flt_sim_vite
+    image: flt_sim:dev
+    command: sh /app/boot-vite.sh
+    volumes:
+      - ..:/app:cached
+      - bundle:/usr/local/bundle
+      - node_modules:/app/node_modules
+      - public:/app/public
+    environment:
+      DEBUG: '*vite*'
+      VITE_RUBY_HOST: 0.0.0.0
+    ports:
+      - "3036:3036"
+    networks:
+      - flt-sim-net

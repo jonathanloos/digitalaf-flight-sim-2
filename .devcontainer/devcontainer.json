@@ -3,9 +3,10 @@
 {
 	"name": "DigitalAF Flight Sim",
 	"dockerComposeFile": [
+    "../docker/docker-compose.dev.yml",
     "docker-compose.yml"
   ],
-	"service": "app",
+  "service": "flt_sim_app",
 	"workspaceFolder": "/app",
 
 	// Set *default* container specific settings.json values on container create.

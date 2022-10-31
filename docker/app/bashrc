@@ -1,0 +1,49 @@
+# ~/.bashrc: executed by bash(1) for non-login shells.
+
+# Note: PS1 and umask are already set in /etc/profile. You should not
+# need this unless you want different defaults for root.
+# PS1='${debian_chroot:+($debian_chroot)}\h:\w\$ '
+PS1='${debian_chroot:+($debian_chroot)}\h:\w [${RAILS_ENV}] \$ '
+# umask 022
+
+# You may uncomment the following lines if you want `ls' to be colorized:
+export LS_OPTIONS='--color=auto'
+eval "`dircolors`"
+alias ls='ls $LS_OPTIONS'
+alias ll='ls $LS_OPTIONS -l'
+alias l='ls $LS_OPTIONS -lA'
+#
+# Some more alias to avoid making mistakes:
+# alias rm='rm -i'
+# alias cp='cp -i'
+# alias mv='mv -i'
+echo '
+    ____  _       _ __        _____    ______   _________       __    __     _____ _                 __      __            
+   / __ \(_)___ _(_) /_____ _/ /   |  / ____/  / ____/ (_)___ _/ /_  / /_   / ___/(_)___ ___  __  __/ /___ _/ /_____  _____
+  / / / / / __ `/ / __/ __ `/ / /| | / /_     / /_  / / / __ `/ __ \/ __/   \__ \/ / __ `__ \/ / / / / __ `/ __/ __ \/ ___/
+ / /_/ / / /_/ / / /_/ /_/ / / ___ |/ __/    / __/ / / / /_/ / / / / /_    ___/ / / / / / / / /_/ / / /_/ / /_/ /_/ / /    
+/_____/_/\__, /_/\__/\__,_/_/_/  |_/_/      /_/   /_/_/\__, /_/ /_/\__/   /____/_/_/ /_/ /_/\__,_/_/\__,_/\__/\____/_/     
+        /____/                                        /____/                                                               
+'
+echo 'Welcome to the Digital Air Force Simulator Tracker'
+echo 'To get started, run `launch` from the terminal'
+
+function launch () {
+  echo "🚀 Launching simulator 🚀"
+  
+  echo "[DAF] Installing ruby gems"
+  bundle check || (bundle config set --local without 'test production' && bundle install)
+
+  echo "[DAF] Installing node packages"
+  yarn install --check-files
+
+  echo "[DAF] Migrating the database"
+  bundle exec rails db:migrate
+
+  echo "[DAF] forcing mode to development"
+  bundle exec rails db:environment:set RAILS_ENV=development
+
+  # Let's get the party started
+  echo "[DAF] Booting the server"
+  bundle exec rails s --binding 0.0.0.0 --port 3000
+}

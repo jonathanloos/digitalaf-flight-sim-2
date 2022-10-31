@@ -14,6 +14,8 @@ RUN apt-get update -q && \
 # App location is /app
 WORKDIR /app
 
+COPY ./docker/app/bashrc /root/.bashrc
+
 # Expose Puma port
 EXPOSE 3000
 EXPOSE 1234

@@ -1,0 +1,41 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  date: 2022-10-31 00:42:22
+  departure_icao: MyString
+  arrival_icao: MyString
+  duration: 1.5
+  pilot_in_command_id: 
+  second_in_command_id: 
+  flt_training: 1.5
+  ground_training: 1.5
+  simulator: 1.5
+  cross_country: 1.5
+  time_of_day: 1
+  actual_instrument: 1.5
+  simulated_instrument: 1.5
+  day_landing: 1
+  night_landing: 1
+  single_engine_land: 1
+  multi_engine_land: 1
+  notes: MyText
+
+two:
+  date: 2022-10-31 00:42:22
+  departure_icao: MyString
+  arrival_icao: MyString
+  duration: 1.5
+  pilot_in_command_id: 
+  second_in_command_id: 
+  flt_training: 1.5
+  ground_training: 1.5
+  simulator: 1.5
+  cross_country: 1.5
+  time_of_day: 1
+  actual_instrument: 1.5
+  simulated_instrument: 1.5
+  day_landing: 1
+  night_landing: 1
+  single_engine_land: 1
+  multi_engine_land: 1
+  notes: MyText
